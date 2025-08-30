@@ -1,59 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./List.module.scss";
 import Column from "./Column";
 import ColumnForm from "./ColumnForm";
-import { nanoid } from "nanoid";
+import { useSelector } from "react-redux";
+import { getAllColumns } from "../../redux/store";
 
 const List = () => {
-  const [columns, setColumns] = useState([
-    {
-      id: 1,
-      title: "Books",
-      icon: "book",
-      cards: [
-        { id: 1, title: "This is Going to Hurt" },
-        { id: 2, title: "Interpreter of Maladies" },
-      ],
-    },
-    {
-      id: 2,
-      title: "Movies",
-      icon: "film",
-      cards: [
-        { id: 1, title: "Harry Potter" },
-        { id: 2, title: "Star Wars" },
-      ],
-    },
-    {
-      id: 3,
-      title: "Games",
-      icon: "gamepad",
-      cards: [
-        { id: 1, title: "The Witcher" },
-        { id: 2, title: "Skyrim" },
-      ],
-    },
-  ]);
-
-  const addColumn = (newColumn) => {
-    setColumns([
-      ...columns,
-      { id: nanoid(), title: newColumn.title, icon: newColumn.icon, cards: [] },
-    ]);
-  };
-
-  const addCard = (newCard, columnId) => {
-    const columnsUpdated = columns.map((column) => {
-      if (column.id === columnId)
-        return {
-          ...column,
-          cards: [...column.cards, { id: nanoid(), title: newCard.title }],
-        };
-      else return column;
-    });
-
-    setColumns(columnsUpdated);
-  };
+  const columns = useSelector(getAllColumns);
 
   return (
     <section className={styles.list}>
@@ -72,12 +25,10 @@ const List = () => {
             id={column.id}
             title={column.title}
             icon={column.icon}
-            cards={column.cards}
-            action={addCard}
           />
         ))}
       </section>
-      <ColumnForm action={addColumn} />
+      <ColumnForm />
     </section>
   );
 };
